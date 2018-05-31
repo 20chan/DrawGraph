@@ -16,15 +16,15 @@ namespace DrawGraph
     {
         Graphics g;
         Pen p;
-        Func<float, float> func;
+        Func<double, double> func;
 
-        float x_min = -30, x_gap = 0.1f;
+        double x_min = -30, x_gap = 0.1f;
 
         public Form1()
         {
             InitializeComponent();
 
-            func = (x) => (float)Math.Pow(-1, x);
+            func = (x) => Math.Pow(x, 2);
             trackBar1.Value = (int)-x_min;
             g = panel1.CreateGraphics();
             p = Pens.Blue;
@@ -53,14 +53,16 @@ namespace DrawGraph
         {
             if (e.KeyCode == Keys.Enter)
             {
-                // TODO: 식 파싱
+                var parsed = Builder.Parse(textBox1.Text);
+                func = x => Evaluate(parsed, x);
+                panel1.Invalidate();
             }
         }
 
         void DrawFunction()
         {
-            float ratio = panel1.Width / (-2 * x_min);
-            float prev_x = x_min, prev_y = func(x_min);
+            double ratio = panel1.Width / (-2 * x_min);
+            double prev_x = x_min, prev_y = func(x_min);
             for (var x = x_min + x_gap; x < -x_min; x += x_gap)
             {
                 var y = func(x);
@@ -71,13 +73,56 @@ namespace DrawGraph
                 prev_y = y;
             }
 
-            void DrawLine(float x1, float y1, float x2, float y2)
+            void DrawLine(double x1, double y1, double x2, double y2)
                 => g.DrawLine(
                     p,
-                    panel1.Width / 2 + x1 * ratio,
-                    panel1.Height / 2 - y1 * ratio,
-                    panel1.Width / 2 + x2 * ratio,
-                    panel1.Height / 2 - y2 * ratio);
+                    (float)(panel1.Width / 2 + x1 * ratio),
+                    (float)(panel1.Height / 2 - y1 * ratio),
+                    (float)(panel1.Width / 2 + x2 * ratio),
+                    (float)(panel1.Height / 2 - y2 * ratio));
+        }
+
+        double Evaluate(Node node, double x)
+        {
+            if (node is BinaryNode bin)
+            {
+                double l = Evaluate(bin.Left, x), r = Evaluate(bin.Right, x);
+                switch (bin.Operator.Code)
+                {
+                    case "+":
+                        return l + r;
+                    case "-":
+                        return l - r;
+                    case "*":
+                        return l * r;
+                    case "/":
+                        return l / r;
+                    case "%":
+                        return l % r;
+                    case "^":
+                        return Math.Pow(l, r);
+                }
+            }
+            else if (node is UnaryNode un)
+            {
+                var val = Evaluate(un.Expression, x);
+                if (un.Operator.Code == "-")
+                    return -val;
+                else
+                    return val;
+            }
+            else if (node is NumericNode num)
+            {
+                return double.Parse(num.Value.Code);
+            }
+            else if (node is IdentifierNode id)
+            {
+                if (id.Value.Code == "x")
+                    return x;
+                else
+                    throw new Exception("모르는 변수가 있음");
+            }
+            throw new Exception("읭");
         }
     }
 }
