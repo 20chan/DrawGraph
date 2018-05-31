@@ -22,7 +22,7 @@ namespace DrawGraph
         {
             InitializeComponent();
 
-            func = (x) => 12 / x;
+            func = (x) => (float)Math.Pow(-1, x);
             trackBar1.Value = (int)-x_min;
             g = panel1.CreateGraphics();
             p = Pens.Blue;
