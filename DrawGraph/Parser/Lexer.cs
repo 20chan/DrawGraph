@@ -51,6 +51,8 @@ namespace DrawGraph.Parser
             {
                 switch (Peek)
                 {
+                    case ' ':
+                        return LexOne();
                     case '+':
                     case '-':
                     case '*':
