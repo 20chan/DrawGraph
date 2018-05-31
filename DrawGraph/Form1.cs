@@ -68,11 +68,14 @@ namespace DrawGraph
         {
             double ratio = panel1.Width / (-2 * x_min);
             double prev_x = x_min, prev_y = func(x_min);
+            double y_max = panel1.Height / 2 * ratio;
+            double y_min = -y_max;
             for (var x = x_min + x_gap; x < -x_min; x += x_gap)
             {
                 var y = func(x);
 
-                DrawLine(prev_x, prev_y, x, y);
+                if ((y < y_max && prev_y < y_max) && (y > y_min && prev_y > y_min))
+                    DrawLine(prev_x, prev_y, x, y);
 
                 prev_x = x;
                 prev_y = y;
