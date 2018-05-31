@@ -49,9 +49,11 @@ namespace DrawGraph.Parser
 
             Token LexOne()
             {
+                if (IsEOF) Error();
                 switch (Peek)
                 {
                     case ' ':
+                        Pop();
                         return LexOne();
                     case '+':
                     case '-':
