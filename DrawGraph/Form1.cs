@@ -56,6 +56,9 @@ namespace DrawGraph
                 var parsed = Builder.Parse(textBox1.Text);
                 func = x => Evaluate(parsed, x);
                 panel1.Invalidate();
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
             }
         }
 
