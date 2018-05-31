@@ -28,11 +28,13 @@ namespace DrawGraph
             trackBar1.Value = (int)-x_min;
             g = panel1.CreateGraphics();
             p = Pens.Blue;
+            
             panel1.Paint += Panel1_Paint;
         }
 
         private void Panel1_Paint(object sender, PaintEventArgs e)
         {
+            g = e.Graphics;
             DrawGrid();
             DrawFunction();
         }
