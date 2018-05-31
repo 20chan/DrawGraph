@@ -51,7 +51,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Parser\Builder.cs" />
     <Compile Include="Parser\Lexer.cs" />
+    <Compile Include="Parser\Node.cs" />
     <Compile Include="Parser\Token.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

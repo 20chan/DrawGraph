@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using DrawGraph.Parser;
+
 namespace DrawGraph
 {
     public partial class Form1 : Form
